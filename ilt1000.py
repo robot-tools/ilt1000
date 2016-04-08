@@ -65,6 +65,14 @@ class ILT1000(object):
   AVERAGING_MEDIUM = 2  # 2 ㎐
   AVERAGING_HIGH = 3  # 0.5 ㎐
 
+  LOG_OPTICAL_DENSITY = 1 << 0
+  LOG_TRANSMISSION_PERCENT = 1 << 1
+  LOG_SENSOR_CURRENT = 1 << 2
+  LOG_SENSOR_VOLTAGE = 1 << 3
+  LOG_CONTROLLER_TEMP = 1 << 4
+  LOG_IRRADIANCE = 1 << 5
+  LOG_REALTIME = 1 << 7
+
   # ILT1000 presents two FTDI serial devices, which become ttyUSB0 and ttyUSB1
   # if nothing else is attached. ttyUSB0 seems to be completely non-responsive.
   # We default to ttyUSB1
@@ -79,12 +87,15 @@ class ILT1000(object):
   def _Clear(self):
     self._dev.timeout = 0.1
     self._dev.write(b'\r\n')
-    self._dev.read(128)
+    self._dev.read(2 ** 16)
     self._dev.timeout = None
+
+  def _GetLine(self):
+    return self._dev.readline().rstrip().decode('ascii')
 
   def _SendCommand(self, command):
     self._dev.write(command.encode('ascii') + b'\r\n')
-    ret = self._dev.readline().rstrip().decode('ascii')
+    ret = self._GetLine()
     if ret == '-999':
       raise UnsupportedCommand(command)
     if ret == '-500':
@@ -238,3 +249,90 @@ class ILT1000(object):
     # SPEC ERROR
     # Returns -999 on my ILT1000-V02 3.0.7.7.
     self._SendCommandOrDie('setsamplecount %d' % sample_count)
+
+  def StartLogging(self, mask, period_seconds):
+    # SPEC ERROR
+    # Spec says period units are seconds, but they appear to be tenths of
+    # seconds
+    # SPEC ERROR
+    # Spec says that this immediately starts logging, but if we've already
+    # started and stopped logging and erased data, logging won't restart until
+    # power is cycled.
+    self._SendCommandOrDie('startlogdata %d %d %d' % (mask, period_seconds * 10, time.time()))
+
+  def StopLogging(self):
+    self._SendCommandOrDie('stoplogdata')
+
+  def EraseLogData(self):
+    self._SendCommandOrDie('eraselogdata')
+
+  def GetLogData(self):
+    samples = int(self._SendCommand('getlogdata'))
+    mask = int(self._GetLine())
+    period = float(self._GetLine()) / 10
+    ret = {
+      'period_seconds': period,
+      'samples': [],
+    }
+    fields = [
+      'recorded',
+    ]
+    if mask & self.LOG_OPTICAL_DENSITY:
+      fields.append('optical_density')
+    if mask & self.LOG_TRANSMISSION_PERCENT:
+      fields.append('transmission_percent')
+    if mask & self.LOG_SENSOR_CURRENT:
+      fields.append('sensor_current')
+    if mask & self.LOG_SENSOR_VOLTAGE:
+      fields.append('sensor_voltage')
+    if mask & self.LOG_CONTROLLER_TEMP:
+      fields.append('controller_temp')
+    if mask & self.LOG_IRRADIANCE:
+      fields.append('irradiance')
+
+    for _ in range(samples):
+      row = self._GetLine()
+      values = row.split(',')
+      sample = [
+        datetime.datetime.fromtimestamp(int(values[0])),
+      ]
+      index = 1
+      if mask & self.LOG_OPTICAL_DENSITY:
+        sample.append(float(values[index]) / 100)
+        index += 1
+      if mask & self.LOG_TRANSMISSION_PERCENT:
+        sample.append(float(values[index]) / 10)
+        index += 1
+      if mask & self.LOG_SENSOR_CURRENT:
+        sample.append(float(values[index]))
+        index += 1
+      if mask & self.LOG_SENSOR_VOLTAGE:
+        sample.append(float(values[index]) / 1000000)
+        index += 1
+      if mask & self.LOG_CONTROLLER_TEMP:
+        sample.append(float(values[index]))
+        index += 1
+      if mask & self.LOG_IRRADIANCE:
+        sample.append(float(values[index]) / 1000)
+        index += 1
+      ret['samples'].append(_Row(fields, sample))
+    return ret
+
+
+class _Row(object):
+
+  def __init__(self, fields, values):
+    self._fields = fields
+    self._values = values
+
+  def __getitem__(self, key):
+    return self._values[self._fields.index(key)]
+
+  def __str__(self):
+    return str(self.AsDict())
+
+  def __repr__(self):
+    return repr(self.AsDict())
+
+  def AsDict(self):
+    return dict(zip(self._fields, self._values))

@@ -52,3 +52,8 @@ for label, callback, unit in LINES:
     PrintLine(label, callback(), unit)
   except ilt1000.Error as e:
     PrintLine(label, str(e), '')
+
+#ilt.StopLogging()
+#ilt.EraseLogData()
+#ilt.StartLogging(148, 1)
+print(ilt.GetLogData())
