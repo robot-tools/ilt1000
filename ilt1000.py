@@ -25,14 +25,14 @@ class Saturated(Error):
   pass
 
 
+class CommandError(Error):
+  pass
+
+
 # TODO commands:
 # eraselogdata
 # getlogdata
-# setautaveraging
 # setcurrentloop
-# sethiaveraging
-# setlowaveraging
-# setmedaveraging
 # setsimpleirrcal
 # setuserdark
 # startlogdata
@@ -61,6 +61,11 @@ class ILT1000(object):
   FEEDBACK_RES_MEDIUM = 2
   FEEDBACK_RES_HIGH = 3
 
+  AVERAGING_AUTO = 0
+  AVERAGING_LOW = 1  # 5 ㎐
+  AVERAGING_MEDIUM = 2  # 2 ㎐
+  AVERAGING_HIGH = 3  # 0.5 ㎐
+
   # ILT1000 presents two FTDI serial devices, which become ttyUSB0 and ttyUSB1
   # if nothing else is attached. ttyUSB0 seems to be completely non-responsive.
   # We default to ttyUSB1
@@ -68,7 +73,7 @@ class ILT1000(object):
   def __init__(self, device='/dev/ttyUSB1', set_time=True):
     self._dev = serial.Serial(device, baudrate=115200)
     self._Clear()
-    assert int(self._SendCommand('echooff')) == 0
+    self._SendCommandOrDie('echooff')
     if set_time:
       self.SetDateTime()
 
@@ -91,6 +96,11 @@ class ILT1000(object):
       raise Saturated(command)
     return ret
 
+  def _SendCommandOrDie(self, command):
+    ret = self._SendCommand(command)
+    if int(ret) != 0:
+      raise CommandError
+
   def GetModelName(self):
     return self._SendCommand('getmodelname')
 
@@ -109,7 +119,7 @@ class ILT1000(object):
   def SetAuxSerialNumber(self, serial):
     # SPEC ERROR
     # This is undocumented.
-    assert int(self._SendCommand('setauxserialno %s' % serial)) == 0
+    self._SendCommandOrDie('setauxserialno %s' % serial)
 
   def GetControllerTempF(self):
     return int(self._SendCommand('gettemp'))
@@ -127,8 +137,7 @@ class ILT1000(object):
   def SetDateTime(self, now=None):
     now = now or datetime.datetime.utcnow()
     timestr = now.strftime('%m/%d/%Y %H:%M:%S')
-    ret = self._SendCommand('setdatetime ' + timestr)
-    assert int(ret) == 0
+    self._SendCommandOrDie('setdatetime ' + timestr)
 
   def GetSensorCurrent(self):
     # SPEC ERROR
@@ -172,7 +181,7 @@ class ILT1000(object):
   }
 
   def SetDarkMode(self, mode):
-    assert int(self._SendCommand(self._DARK_MODE_COMMANDS[mode])) == 0
+    self._SendCommandOrDie(self._DARK_MODE_COMMANDS[mode])
 
   def GetFactoryDarkVoltages(self):
     # SPEC ERROR
@@ -200,7 +209,7 @@ class ILT1000(object):
     # SPEC ERROR
     # Command returns -999 on my ILT1000-V02. Implementation below is untested
     # and likely wrong.
-    assert int(self._SendCommand('setclockfreq')) == 0
+    self._SendCommandOrDie('setclockfreq')
     self._dev.write(b'A')
     time.sleep(60.0)
     self._dev.write(b'B')
@@ -210,4 +219,16 @@ class ILT1000(object):
     return float(ret) * 100
 
   def SetFeedbackResistor(self, resistor):
-    assert int(self._SendCommand('usefeedbackres %d' % resistor)) == 0
+    self._SendCommandOrDie('usefeedbackres %d' % resistor)
+
+  _AVERAGING_COMMANDS = {
+    AVERAGING_AUTO: 'setautaveraging',
+    AVERAGING_LOW: 'setlowaveraging',
+    AVERAGING_MEDIUM: 'setmedaveraging',
+    AVERAGING_HIGH: 'sethiaveraging',
+  }
+
+  def SetAveraging(self, averaging):
+    # SPEC WARNING
+    # There does not appear to be a way to read this back.
+    self._SendCommandOrDie(self._AVERAGING_COMMANDS[averaging])

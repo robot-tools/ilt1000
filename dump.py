@@ -23,6 +23,9 @@ def PrintLine(label, value, unit=''):
 ilt = ilt1000.ILT1000(device=FLAGS.device)
 
 
+ilt.SetAveraging(ilt.AVERAGING_AUTO)
+
+
 LINES = [
   ('Model', ilt.GetModelName, ''),
   ('Generation', ilt.GetGeneration, ''),
