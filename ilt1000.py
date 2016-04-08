@@ -41,7 +41,6 @@ class CommandError(Error):
 # erasecalfactor
 # getcalfactor
 # setcalfactor
-# setsamplecount
 
 
 class ILT1000(object):
@@ -180,7 +179,7 @@ class ILT1000(object):
     DARK_USER: 'useuserdark',
   }
 
-  def SetDarkMode(self, mode):
+  def SetDarkMode(self, mode=DARK_FACTORY):
     self._SendCommandOrDie(self._DARK_MODE_COMMANDS[mode])
 
   def GetFactoryDarkVoltages(self):
@@ -207,8 +206,8 @@ class ILT1000(object):
 
   def SetClockFrequency(self):
     # SPEC ERROR
-    # Command returns -999 on my ILT1000-V02. Implementation below is untested
-    # and likely wrong.
+    # Command returns -999 on my ILT1000-V02 3.0.7.7. Implementation below is
+    # untested and likely wrong.
     self._SendCommandOrDie('setclockfreq')
     self._dev.write(b'A')
     time.sleep(60.0)
@@ -218,7 +217,7 @@ class ILT1000(object):
     ret = self._SendCommand('getfeedbackres')
     return float(ret) * 100
 
-  def SetFeedbackResistor(self, resistor):
+  def SetFeedbackResistor(self, resistor=FEEDBACK_RES_AUTO):
     self._SendCommandOrDie('usefeedbackres %d' % resistor)
 
   _AVERAGING_COMMANDS = {
@@ -228,7 +227,14 @@ class ILT1000(object):
     AVERAGING_HIGH: 'sethiaveraging',
   }
 
-  def SetAveraging(self, averaging):
+  def SetAveraging(self, averaging=AVERAGING_AUTO):
     # SPEC WARNING
     # There does not appear to be a way to read this back.
     self._SendCommandOrDie(self._AVERAGING_COMMANDS[averaging])
+
+  def SetSampleCount(self, sample_count=200):
+    # SPEC WARNING
+    # There does not appear to be a way to read this back.
+    # SPEC ERROR
+    # Returns -999 on my ILT1000-V02 3.0.7.7.
+    self._SendCommandOrDie('setsamplecount %d' % sample_count)
