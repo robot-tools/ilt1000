@@ -28,7 +28,6 @@ class Saturated(Error):
 # TODO commands:
 # eraselogdata
 # getlogdata
-# set100perc
 # setautaveraging
 # setcurrentloop
 # sethiaveraging
@@ -151,6 +150,12 @@ class ILT1000(object):
     # SPEC ERROR
     # Spec says microvolts, but actual values appear to be in volts.
     ret = self._SendCommand('get100perc')
+    return float(ret)
+
+  def Set100PercentVoltage(self):
+    # SPEC ERROR
+    # Spec says microvolts, but actual values appear to be in volts.
+    ret = self._SendCommand('set100perc')
     return float(ret)
 
   def GetDarkMode(self):
