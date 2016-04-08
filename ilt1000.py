@@ -57,6 +57,16 @@ class Saturated(Error):
 
 class ILT1000(object):
 
+  DARK_NONE = 0
+  DARK_FACTORY = 1
+  DARK_USER = 2
+
+  DARK_NAMES = {
+    0: 'None',
+    1: 'Factory',
+    2: 'User',
+  }
+
   # ILT1000 presents two FTDI serial devices, which become ttyUSB0 and ttyUSB1
   # if nothing else is attached. ttyUSB0 seems to be completely non-responsive.
   # We default to ttyUSB1
@@ -144,3 +154,6 @@ class ILT1000(object):
     # Spec says microvolts, but actual values appear to be in volts.
     ret = self._SendCommand('get100perc')
     return float(ret)
+
+  def GetDarkMode(self):
+    return int(self._SendCommand('getdarkmode'))
