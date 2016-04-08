@@ -170,6 +170,10 @@ class ILT1000(object):
     ret = self._SendCommand('set100perc')
     return float(ret)
 
+  def GetIrradiance(self):
+    ret = self._SendCommand('getirradiance')
+    return float(ret) / 1000
+
   def GetDarkMode(self):
     return int(self._SendCommand('getdarkmode'))
 
@@ -195,10 +199,6 @@ class ILT1000(object):
     # R1 12149 9733 9251 R2 12476 10080 9604 R3 13940 11894 11435
     ret = self._SendCommand('getfactorydark')
     return [float(x) / 1000000 for x in ret.split()]
-
-  def GetIrradiance(self):
-    ret = self._SendCommand('getirradiance')
-    return float(ret) / 1000
 
   def GetClockFrequencyHz(self):
     ret = self._SendCommand('getclockfreq')
