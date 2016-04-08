@@ -28,7 +28,6 @@ class Saturated(Error):
 # TODO commands:
 # eraselogdata
 # getlogdata
-# getuserdark
 # set100perc
 # setautaveraging
 # setcurrentloop
@@ -40,10 +39,7 @@ class Saturated(Error):
 # startlogdata
 # stoplogdata
 # usecalfactor
-# usefactorydark
 # usefeedbackres
-# usenodark
-# useuserdark
 # erasecalfactor
 # getcalfactor
 # setcalfactor
@@ -160,7 +156,23 @@ class ILT1000(object):
   def GetDarkMode(self):
     return int(self._SendCommand('getdarkmode'))
 
+  _DARK_MODE_COMMANDS = {
+    DARK_NONE: 'usenodark',
+    DARK_FACTORY: 'usefactorydark',
+    DARK_USER: 'useuserdark',
+  }
+
+  def SetDarkMode(self, mode):
+    assert int(self._SendCommand(self._DARK_MODE_COMMANDS[mode])) == 0
+
   def GetFactoryDarkVoltages(self):
+    # SPEC ERROR
+    # Actual return value sample:
+    # R1 12149 9733 9251 R2 12476 10080 9604 R3 13940 11894 11435
+    ret = self._SendCommand('getfactorydark')
+    return [float(x) / 1000000 for x in ret.split()]
+
+  def GetUserDarkVoltages(self):
     # SPEC ERROR
     # Actual return value sample:
     # R1 12149 9733 9251 R2 12476 10080 9604 R3 13940 11894 11435
