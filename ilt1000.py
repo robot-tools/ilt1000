@@ -46,7 +46,6 @@ class Saturated(Error):
 # useuserdark
 # erasecalfactor
 # getcalfactor
-# getclockfreq
 # getfeedbackres
 # setcalfactor
 # setclockfreq
@@ -159,3 +158,7 @@ class ILT1000(object):
   def GetIrradiance(self):
     ret = self._SendCommand('getirradiance')
     return float(ret) / 1000
+
+  def GetClockFrequencyHz(self):
+    ret = self._SendCommand('getclockfreq')
+    return float(ret) / 100
