@@ -24,9 +24,46 @@ class Saturated(Error):
   pass
 
 
+# TODO commands:
+# eraselogdata
+# get100perc
+# getauxserialno
+# getdarkmode
+# getfactorydark
+# getirradiance
+# getlogdata
+# getuserdark
+# set100perc
+# setautaveraging
+# setcurrentloop
+# sethiaveraging
+# setlowaveraging
+# setmedaveraging
+# setsimpleirrcal
+# setuserdark
+# startlogdata
+# stoplogdata
+# usecalfactor
+# usefactorydark
+# usefeedbackres
+# usenodark
+# useuserdark
+# erasecalfactor
+# getcalfactor
+# getclockfreq
+# getfeedbackres
+# setcalfactor
+# setclockfreq
+# setsamplecount
+
+
 class ILT1000(object):
 
-  def __init__(self, device, set_time=True):
+  # ILT1000 presents two FTDI serial devices, which become ttyUSB0 and ttyUSB1
+  # if nothing else is attached. ttyUSB0 seems to be completely non-responsive.
+  # We default to ttyUSB1
+
+  def __init__(self, device='/dev/ttyUSB1', set_time=True):
     self._dev = serial.Serial(device, 115200)
     try:
       # clear junk in outgoing buffer
@@ -66,6 +103,7 @@ class ILT1000(object):
     return int(self._SendCommand('gettemp'))
 
   def GetAmbientTempF(self):
+    # SPEC ERROR
     # Protocol doc indicates that this is degrees F * 100, but actual values
     # look like just degrees F
     return int(self._SendCommand('getambienttemp'))
@@ -80,11 +118,15 @@ class ILT1000(object):
     ret = self._SendCommand('setdatetime ' + timestr)
     assert int(ret) == 0
 
-  def GetCurrentPicoAmps(self):
+  def GetSensorCurrent(self):
+    # SPEC ERROR
+    # Protocol doc indicates that this is in pA, but atual values are in
+    # scientific notation and appear to be A. They are also suspiciously
+    # similar to getvoltage return values.
     ret = self._SendCommand('getcurrent')
     return float(ret)
 
-  def GetVoltage(self):
+  def GetSensorVoltage(self):
     ret = self._SendCommand('getvoltage')
     return float(ret) / 1000000
 
