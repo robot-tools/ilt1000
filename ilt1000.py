@@ -26,7 +26,6 @@ class Saturated(Error):
 
 # TODO commands:
 # eraselogdata
-# get100perc
 # getauxserialno
 # getdarkmode
 # getfactorydark
@@ -137,3 +136,7 @@ class ILT1000(object):
   def GetOpticalDensity(self):
     ret = self._SendCommand('getod')
     return float(ret) / 100
+
+  def Get100PercentVoltage(self):
+    ret = self._SendCommand('get100perc')
+    return float(ret) / 1000000

@@ -35,6 +35,7 @@ LINES = [
   ('Sensor voltage', ilt.GetSensorVoltage, 'V'),
   ('Transmission', ilt.GetTransmissionPercent, '%'),
   ('Optical density', ilt.GetOpticalDensity, '%'),
+  ('100% percent setting', ilt.Get100PercentVoltage, 'V'),
 ]
 
 
