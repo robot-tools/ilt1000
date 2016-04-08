@@ -38,6 +38,7 @@ LINES = [
   ('Optical density', ilt.GetOpticalDensity, '%'),
   ('100% percent setting', ilt.Get100PercentVoltage, 'V'),
   ('Dark mode', lambda: ilt.DARK_NAMES[ilt.GetDarkMode()], ''),
+  ('Irradiance', ilt.GetIrradiance, ''),
 ]
 
 

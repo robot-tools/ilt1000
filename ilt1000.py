@@ -26,9 +26,7 @@ class Saturated(Error):
 
 # TODO commands:
 # eraselogdata
-# getdarkmode
 # getfactorydark
-# getirradiance
 # getlogdata
 # getuserdark
 # set100perc
@@ -157,3 +155,7 @@ class ILT1000(object):
 
   def GetDarkMode(self):
     return int(self._SendCommand('getdarkmode'))
+
+  def GetIrradiance(self):
+    ret = self._SendCommand('getirradiance')
+    return float(ret) / 1000
