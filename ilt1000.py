@@ -157,8 +157,11 @@ class ILT1000(object):
     return float(ret)
 
   def GetSensorVoltage(self):
+    # SPEC WARNING
+    # These are supposed to be millivolts, but that makes resulting values
+    # absurdly small
     ret = self._SendCommand('getvoltage')
-    return float(ret) / 1000000
+    return float(ret)
 
   def GetTransmissionPercent(self):
     ret = self._SendCommand('gettrans')
@@ -306,7 +309,7 @@ class ILT1000(object):
         sample.append(float(values[index]))
         index += 1
       if mask & self.LOG_SENSOR_VOLTAGE:
-        sample.append(float(values[index]) / 1000000)
+        sample.append(float(values[index]))
         index += 1
       if mask & self.LOG_CONTROLLER_TEMP:
         sample.append(float(values[index]))
