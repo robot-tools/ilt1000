@@ -26,7 +26,6 @@ class Saturated(Error):
 
 # TODO commands:
 # eraselogdata
-# getauxserialno
 # getdarkmode
 # getfactorydark
 # getirradiance
@@ -97,6 +96,9 @@ class ILT1000(object):
 
   def GetSerialNumber(self):
     return self._SendCommand('getserialnumber')
+
+  def GetAuxSerialNumber(self):
+    return self._SendCommand('getauxserialno')
 
   def GetControllerTempF(self):
     return int(self._SendCommand('gettemp'))
