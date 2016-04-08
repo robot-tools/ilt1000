@@ -152,8 +152,7 @@ class ILT1000(object):
   def GetSensorCurrent(self):
     # SPEC ERROR
     # Protocol doc indicates that this is in pA, but actual values are in
-    # scientific notation and appear to be A. They are also suspiciously
-    # similar to getvoltage return values.
+    # scientific notation and appear to be A.
     ret = self._SendCommand('getcurrent')
     return float(ret)
 
