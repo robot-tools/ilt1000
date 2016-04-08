@@ -154,10 +154,6 @@ class ILT1000(object):
     ret = self._SendCommand('gettrans')
     return float(ret) / 10
 
-  def GetOpticalDensity(self):
-    ret = self._SendCommand('getod')
-    return float(ret) / 100
-
   def Get100PercentVoltage(self):
     # SPEC ERROR
     # Spec says microvolts, but actual values appear to be in volts.
@@ -169,6 +165,10 @@ class ILT1000(object):
     # Spec says microvolts, but actual values appear to be in volts.
     ret = self._SendCommand('set100perc')
     return float(ret)
+
+  def GetOpticalDensity(self):
+    ret = self._SendCommand('getod')
+    return float(ret) / 100
 
   def GetIrradiance(self):
     ret = self._SendCommand('getirradiance')
