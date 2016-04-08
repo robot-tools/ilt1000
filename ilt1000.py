@@ -47,7 +47,6 @@ class Saturated(Error):
 # useuserdark
 # erasecalfactor
 # getcalfactor
-# getfeedbackres
 # setcalfactor
 # setsamplecount
 
@@ -178,3 +177,7 @@ class ILT1000(object):
     self._dev.write(b'A')
     time.sleep(60.0)
     self._dev.write(b'B')
+
+  def GetFeedbackResistanceOhm(self):
+    ret = self._SendCommand('getfeedbackres')
+    return float(ret) * 100

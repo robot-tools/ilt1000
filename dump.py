@@ -39,9 +39,13 @@ LINES = [
   ('100% percent setting', ilt.Get100PercentVoltage, 'V'),
   ('Dark mode', lambda: ilt.DARK_NAMES[ilt.GetDarkMode()], ''),
   ('Irradiance', ilt.GetIrradiance, ''),
-  ('Clock frequency', ilt.GetClockFrequencyHz, 'Hz'),
+  ('Clock frequency', ilt.GetClockFrequencyHz, '㎐'),
+  ('Feedback resistance', ilt.GetFeedbackResistanceOhm, 'Ω'),
 ]
 
 
 for label, callback, unit in LINES:
-  PrintLine(label, callback(), unit)
+  try:
+    PrintLine(label, callback(), unit)
+  except ilt1000.Error as e:
+    PrintLine(label, str(e), '')
