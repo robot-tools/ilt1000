@@ -2,6 +2,7 @@
 
 import datetime
 import serial
+import time
 
 
 class Error(Exception):
@@ -48,7 +49,6 @@ class Saturated(Error):
 # getcalfactor
 # getfeedbackres
 # setcalfactor
-# setclockfreq
 # setsamplecount
 
 
@@ -69,15 +69,17 @@ class ILT1000(object):
   # We default to ttyUSB1
 
   def __init__(self, device='/dev/ttyUSB1', set_time=True):
-    self._dev = serial.Serial(device, 115200)
-    try:
-      # clear junk in outgoing buffer
-      self._SendCommand('echooff')
-    except UnsupportedCommand:
-      pass
+    self._dev = serial.Serial(device, baudrate=115200)
+    self._Clear()
     assert int(self._SendCommand('echooff')) == 0
     if set_time:
       self.SetDateTime()
+
+  def _Clear(self):
+    self._dev.timeout = 0.1
+    self._dev.write(b'\r\n')
+    self._dev.read(128)
+    self._dev.timeout = None
 
   def _SendCommand(self, command):
     self._dev.write(command.encode('ascii') + b'\r\n')
@@ -106,6 +108,11 @@ class ILT1000(object):
 
   def GetAuxSerialNumber(self):
     return self._SendCommand('getauxserialno')
+
+  def SetAuxSerialNumber(self, serial):
+    # SPEC ERROR
+    # This is undocumented.
+    assert int(self._SendCommand('setauxserialno %s' % serial)) == 0
 
   def GetControllerTempF(self):
     return int(self._SendCommand('gettemp'))
@@ -162,3 +169,12 @@ class ILT1000(object):
   def GetClockFrequencyHz(self):
     ret = self._SendCommand('getclockfreq')
     return float(ret) / 100
+
+  def SetClockFrequency(self):
+    # SPEC ERROR
+    # Command returns -999 on my ILT1000-V02. Implementation below is untested
+    # and likely wrong.
+    assert int(self._SendCommand('setclockfreq')) == 0
+    self._dev.write(b'A')
+    time.sleep(60.0)
+    self._dev.write(b'B')

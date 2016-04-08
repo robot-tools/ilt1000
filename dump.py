@@ -28,7 +28,7 @@ LINES = [
   ('Generation', ilt.GetGeneration, ''),
   ('Firmware version', ilt.GetFirmwareVersion, ''),
   ('Serial number', ilt.GetSerialNumber, ''),
-  # No GetAuxSerialNumber, because it errors on my ILT1000-V02
+  ('Aux serial number', ilt.GetAuxSerialNumber, ''),
   ('Controller temperature', ilt.GetControllerTempF, '°F'),
   ('Ambient temperature', ilt.GetAmbientTempF, '°F'),
   ('Date/time', ilt.GetDateTime, ''),
