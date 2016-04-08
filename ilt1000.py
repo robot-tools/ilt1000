@@ -119,7 +119,7 @@ class ILT1000(object):
 
   def GetSensorCurrent(self):
     # SPEC ERROR
-    # Protocol doc indicates that this is in pA, but atual values are in
+    # Protocol doc indicates that this is in pA, but actual values are in
     # scientific notation and appear to be A. They are also suspiciously
     # similar to getvoltage return values.
     ret = self._SendCommand('getcurrent')
@@ -138,5 +138,7 @@ class ILT1000(object):
     return float(ret) / 100
 
   def Get100PercentVoltage(self):
+    # SPEC ERROR
+    # Spec says microvolts, but actual values appear to be in volts.
     ret = self._SendCommand('get100perc')
-    return float(ret) / 1000000
+    return float(ret)
