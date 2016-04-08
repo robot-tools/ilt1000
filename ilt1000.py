@@ -38,7 +38,6 @@ class Saturated(Error):
 # startlogdata
 # stoplogdata
 # usecalfactor
-# usefeedbackres
 # erasecalfactor
 # getcalfactor
 # setcalfactor
@@ -56,6 +55,11 @@ class ILT1000(object):
     1: 'Factory',
     2: 'User',
   }
+
+  FEEDBACK_RES_AUTO = 0
+  FEEDBACK_RES_LOW = 1
+  FEEDBACK_RES_MEDIUM = 2
+  FEEDBACK_RES_HIGH = 3
 
   # ILT1000 presents two FTDI serial devices, which become ttyUSB0 and ttyUSB1
   # if nothing else is attached. ttyUSB0 seems to be completely non-responsive.
@@ -204,3 +208,6 @@ class ILT1000(object):
   def GetFeedbackResistanceOhm(self):
     ret = self._SendCommand('getfeedbackres')
     return float(ret) * 100
+
+  def SetFeedbackResistor(self, resistor):
+    assert int(self._SendCommand('usefeedbackres %d' % resistor)) == 0
