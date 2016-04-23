@@ -39,7 +39,7 @@ LINES = [
   ('Sensor voltage', ilt.GetSensorVoltage, 'V'),
   ('Transmission', ilt.GetTransmissionPercent, '%'),
   ('Optical density', ilt.GetOpticalDensity, '%'),
-  ('100% percent setting', ilt.Get100PercentVoltage, 'V'),
+  ('100% percent setting', ilt.Get100PercentCurrent, 'A'),
   ('Dark mode', lambda: ilt.DARK_NAMES[ilt.GetDarkMode()], ''),
   ('Irradiance', ilt.GetIrradiance, ''),
   ('Clock frequency', ilt.GetClockFrequencyHz, '㎐'),

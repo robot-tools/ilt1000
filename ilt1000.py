@@ -127,17 +127,12 @@ class ILT1000(object):
     return self._SendCommand('getauxserialno')
 
   def SetAuxSerialNumber(self, serial):
-    # SPEC ERROR
-    # This is undocumented.
     self._SendCommandOrDie('setauxserialno %s' % serial)
 
   def GetControllerTempF(self):
     return int(self._SendCommand('gettemp'))
 
   def GetAmbientTempF(self):
-    # SPEC ERROR
-    # Protocol doc indicates that this is degrees F * 100, but actual values
-    # look like just degrees F
     return int(self._SendCommand('getambienttemp'))
 
   def GetDateTime(self):
@@ -150,16 +145,10 @@ class ILT1000(object):
     self._SendCommandOrDie('setdatetime ' + timestr)
 
   def GetSensorCurrent(self):
-    # SPEC ERROR
-    # Protocol doc indicates that this is in pA, but actual values are in
-    # scientific notation and appear to be A.
     ret = self._SendCommand('getcurrent')
     return float(ret)
 
   def GetSensorVoltage(self):
-    # SPEC WARNING
-    # These are supposed to be millivolts, but that makes resulting values
-    # absurdly small
     ret = self._SendCommand('getvoltage')
     return float(ret)
 
@@ -167,15 +156,11 @@ class ILT1000(object):
     ret = self._SendCommand('gettrans')
     return float(ret) / 10
 
-  def Get100PercentVoltage(self):
-    # SPEC ERROR
-    # Spec says microvolts, but actual values appear to be in volts.
+  def Get100PercentCurrent(self):
     ret = self._SendCommand('get100perc')
     return float(ret)
 
-  def Set100PercentVoltage(self):
-    # SPEC ERROR
-    # Spec says microvolts, but actual values appear to be in volts.
+  def Set100PercentCurrent(self):
     ret = self._SendCommand('set100perc')
     return float(ret)
 
@@ -217,15 +202,6 @@ class ILT1000(object):
     ret = self._SendCommand('getclockfreq')
     return float(ret) / 100
 
-  def SetClockFrequency(self):
-    # SPEC ERROR
-    # Command returns -999 on my ILT1000-V02 3.0.7.7. Implementation below is
-    # untested and likely wrong.
-    self._SendCommandOrDie('setclockfreq')
-    self._dev.write(b'A')
-    time.sleep(60.0)
-    self._dev.write(b'B')
-
   def GetFeedbackResistanceOhm(self):
     ret = self._SendCommand('getfeedbackres')
     return float(ret) * 100
@@ -241,26 +217,10 @@ class ILT1000(object):
   }
 
   def SetAveraging(self, averaging=AVERAGING_AUTO):
-    # SPEC WARNING
-    # There does not appear to be a way to read this back.
     self._SendCommandOrDie(self._AVERAGING_COMMANDS[averaging])
 
-  def SetSampleCount(self, sample_count=200):
-    # SPEC WARNING
-    # There does not appear to be a way to read this back.
-    # SPEC ERROR
-    # Returns -999 on my ILT1000-V02 3.0.7.7.
-    self._SendCommandOrDie('setsamplecount %d' % sample_count)
-
   def StartLogging(self, mask, period_seconds):
-    # SPEC ERROR
-    # Spec says period units are seconds, but they appear to be tenths of
-    # seconds
-    # SPEC ERROR
-    # Spec says that this immediately starts logging, but if we've already
-    # started and stopped logging and erased data, logging won't restart until
-    # power is cycled.
-    self._SendCommandOrDie('startlogdata %d %d %d' % (mask, period_seconds * 10, time.time()))
+    self._SendCommandOrDie('startlogdata %d %d %d' % (mask, period_seconds * 100, time.time()))
 
   def StopLogging(self):
     self._SendCommandOrDie('stoplogdata')
