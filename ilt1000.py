@@ -35,9 +35,6 @@ class CommandError(Error):
 
 # setcurrentloop
 
-# setuserdark
-# setfactorydark
-
 # usecalfactor
 # erasecalfactor
 # getcalfactor
@@ -227,19 +224,24 @@ class ILT1000(object):
   def SetDarkMode(self, mode=DARK_FACTORY):
     self._SendCommandOrDie(self._DARK_MODE_COMMANDS[mode])
 
-  def GetFactoryDarkVoltages(self):
-    ret = self._SendCommand('getfactorydark')
+  def _DarkCommand(self, command):
+    ret = self._SendCommand(command)
     values = ret.split(' ')
     return [
         [float(values[4 * r + i + 1]) / 1000000 for i in range(3)]
         for r in range(3)]
 
+  def SetFactoryDarkVoltages(self):
+    return self._DarkCommand('setfactorydark')
+
+  def GetFactoryDarkVoltages(self):
+    return self._DarkCommand('getfactorydark')
+
+  def SetUserDarkVoltages(self):
+    return self._DarkCommand('setuserdark')
+
   def GetUserDarkVoltages(self):
-    ret = self._SendCommand('getuserdark')
-    values = ret.split(' ')
-    return [
-        [float(values[4 * r + i + 1]) / 1000000 for i in range(3)]
-        for r in range(3)]
+    return self._DarkCommand('getuserdark')
 
   def GetClockFrequencyHz(self):
     ret = self._SendCommand('getclockfreq')
