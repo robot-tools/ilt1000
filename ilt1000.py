@@ -65,8 +65,6 @@ class CommandError(Error):
 # gettriggerin
 # settriggerout
 
-# getvoltagestage
-
 # getvagc3
 # getvped
 # getvped
@@ -204,6 +202,9 @@ class ILT1000(object):
 
   def GetSensorVoltage(self):
     return float(self._SendCommand('getvoltage'))
+
+  def GetVoltageStage(self):
+    return int(self._SendCommand('getvoltagestage'))
 
   def GetTransmissionPercent(self):
     return float(self._SendCommand('gettrans'))
