@@ -30,6 +30,7 @@ LINES = [
   ('Model', ilt.GetModelName, ''),
   ('Generation', ilt.GetGeneration, ''),
   ('Firmware version', ilt.GetFirmwareVersion, ''),
+  ('API version', ilt.GetAPIVersion, ''),
   ('Serial number', ilt.GetSerialNumber, ''),
   ('Aux serial number', ilt.GetAuxSerialNumber, ''),
   ('Friendly name', ilt.GetFriendlyName, ''),

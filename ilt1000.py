@@ -39,10 +39,6 @@ class CommandError(Error):
 
 # getirrthresholdlow
 # setirrthresholdlow
-# setirrdatapoint
-# eraseirrdata
-# setsimpleirrcal
-# storeirrdata
 
 # setcurrentloop
 
@@ -59,12 +55,9 @@ class CommandError(Error):
 # setcalfactor
 # usecalfactortemp
 
-# setsamplecount
 # getsampletime
 # setsampletime
 # setsampletimetemp
-
-# getapiversion
 
 # getbias
 
@@ -186,6 +179,9 @@ class ILT1000(object):
   def GetFirmwareVersion(self):
     return self._SendCommand('getfwversion')
 
+  def GetAPIVersion(self):
+    return int(self._SendCommand('getapiversion'))
+
   def GetSerialNumber(self):
     return self._SendCommand('getserialnumber')
 
@@ -220,7 +216,7 @@ class ILT1000(object):
 
   def GetTransmissionPercent(self):
     ret = self._SendCommand('gettrans')
-    return float(ret) / 10
+    return float(ret)
 
   def Get100PercentCurrent(self):
     ret = self._SendCommand('get100perc')
@@ -232,7 +228,7 @@ class ILT1000(object):
 
   def GetOpticalDensity(self):
     ret = self._SendCommand('getod')
-    return float(ret) / 100
+    return float(ret)
 
   def GetIrradiance(self):
     ret = self._SendCommand('getirradiance')
@@ -297,7 +293,7 @@ class ILT1000(object):
   def GetLogData(self):
     samples = int(self._SendCommand('getlogdata'))
     mask = int(self._GetLine())
-    period = float(self._GetLine()) / 10
+    period = float(self._GetLine()) / 100
     ret = {
       'period_seconds': period,
       'samples': [],
@@ -326,10 +322,10 @@ class ILT1000(object):
       ]
       index = 1
       if mask & self.LOG_OPTICAL_DENSITY:
-        sample.append(float(values[index]) / 100)
+        sample.append(float(values[index]))
         index += 1
       if mask & self.LOG_TRANSMISSION_PERCENT:
-        sample.append(float(values[index]) / 10)
+        sample.append(float(values[index]))
         index += 1
       if mask & self.LOG_SENSOR_CURRENT:
         sample.append(float(values[index]))
