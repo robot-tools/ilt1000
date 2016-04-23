@@ -58,10 +58,6 @@ class CommandError(Error):
 
 # setfeedbackres
 
-# getintegrate
-# startintegrate
-# stopintegrate
-
 # gettriggerin
 # settriggerout
 
@@ -367,6 +363,15 @@ class ILT1000(object):
 
   def GetPeak(self):
     return float(self._SendCommand('getpeak'))
+
+  def StartIntegrate(self):
+    self._SendCommandOrDie('startintegrate')
+
+  def StopIntegrate(self):
+    self._SendCommandOrDie('stopintegrate')
+
+  def GetIntegrate(self):
+    return float(self._SendCommand('getintegrate'))
 
 
 class _Row(object):
