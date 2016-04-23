@@ -50,6 +50,7 @@ LINES = [
   ('Factory dark', ilt.GetFactoryDarkVoltages, 'V'),
   ('User dark', ilt.GetUserDarkVoltages, 'V'),
   ('Ambient', ilt.GetAmbientCurrent, 'A'),
+  ('Sample time', ilt.GetSampleTime, 's'),
 ]
 
 

@@ -49,7 +49,6 @@ class CommandError(Error):
 # setcalfactor
 # usecalfactortemp
 
-# getsampletime
 # setsampletime
 # setsampletimetemp
 
@@ -345,6 +344,10 @@ class ILT1000(object):
 
   def GetAmbientCurrent(self):
     return float(self._SendCommand('getambientlevel'))
+
+  def GetSampleTime(self):
+    ret = self._SendCommand('getsampletime')
+    return float(ret) / 1000
 
 
 class _Row(object):
