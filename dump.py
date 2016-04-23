@@ -32,6 +32,7 @@ LINES = [
   ('Firmware version', ilt.GetFirmwareVersion, ''),
   ('Serial number', ilt.GetSerialNumber, ''),
   ('Aux serial number', ilt.GetAuxSerialNumber, ''),
+  ('Friendly name', ilt.GetFriendlyName, ''),
   ('Controller temperature', ilt.GetControllerTempF, '°F'),
   ('Ambient temperature', ilt.GetAmbientTempF, '°F'),
   ('Date/time', ilt.GetDateTime, ''),

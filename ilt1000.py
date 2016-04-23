@@ -76,9 +76,6 @@ class CommandError(Error):
 # usefeedbackrestemp
 # setfeedbackres
 
-# getfriendlyname
-# setfriendlyname
-
 # getintegrate
 # startintegrate
 # topintegrate
@@ -353,6 +350,12 @@ class ILT1000(object):
     # SPEC ERROR: There doesn't seem to be a good way to, other than a timing
     # hack, to find the end of the getinfo response.
     raise UnsupportedCommand
+
+  def GetFriendlyName(self):
+    return self._SendCommand('getfriendlyname')
+
+  def SetFriendlyName(self, name):
+    self._SendCommandOrDie('setfriendlyname %s' % name)
 
 
 class _Row(object):
