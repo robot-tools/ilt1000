@@ -79,8 +79,6 @@ class CommandError(Error):
 # getfriendlyname
 # setfriendlyname
 
-# getinfo
-
 # getintegrate
 # startintegrate
 # topintegrate
@@ -350,6 +348,11 @@ class ILT1000(object):
         index += 1
       ret['samples'].append(_Row(fields, sample))
     return ret
+
+  def GetInfo(self):
+    # SPEC ERROR: There doesn't seem to be a good way to, other than a timing
+    # hack, to find the end of the getinfo response.
+    raise UnsupportedCommand
 
 
 class _Row(object):
