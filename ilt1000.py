@@ -30,18 +30,86 @@ class CommandError(Error):
 
 
 # TODO commands:
-# eraselogdata
-# getlogdata
-# setcurrentloop
+# captureflash (SPEC ERROR: doc description missing)
+# getflash
+
+# clearambientlevel
+# getambientlevel
+# setambientlevel
+
+# getirrthresholdlow
+# setirrthresholdlow
+# setirrdatapoint
+# eraseirrdata
 # setsimpleirrcal
+# storeirrdata
+
+# setcurrentloop
+
 # setuserdark
+# getuserdark
+# setfactorydark
+
 # startlogdata
 # stoplogdata
+# eraselogdata
+
 # usecalfactor
 # erasecalfactor
 # getcalfactor
 # setcalfactor
+# usecalfactortemp
+
 # setsamplecount
+# getsampletime
+# setsampletime
+# setsampletimetemp
+
+# getapiversion
+
+# getbias
+
+# getecal
+# getecaldate
+# setecal
+
+# getfeedbackresnumber
+# usefeedbackrestemp
+# setfeedbackres
+
+# getfriendlyname
+# setfriendlyname
+
+# getinfo
+
+# getintegrate
+# startintegrate
+# topintegrate
+
+# getpeak
+# startpeak
+
+# gettriggerin
+# settriggerout
+
+# getvoltagestage
+
+# getvagc3
+# getvped
+# getvped
+# getvx1
+# getvx17
+# set0vbias
+# set5vbias
+
+# setwireless
+
+# configbackup
+# configrestore
+
+# setmodelname
+
+# setwflisten
 
 
 class ILT1000(object):
@@ -174,7 +242,7 @@ class ILT1000(object):
 
   def GetIrradiance(self):
     ret = self._SendCommand('getirradiance')
-    return float(ret) / 1000
+    return float(ret)
 
   def GetDarkMode(self):
     return int(self._SendCommand('getdarkmode'))
@@ -279,7 +347,7 @@ class ILT1000(object):
         sample.append(float(values[index]))
         index += 1
       if mask & self.LOG_IRRADIANCE:
-        sample.append(float(values[index]) / 1000)
+        sample.append(float(values[index]))
         index += 1
       ret['samples'].append(_Row(fields, sample))
     return ret
