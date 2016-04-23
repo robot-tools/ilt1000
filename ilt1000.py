@@ -34,7 +34,6 @@ class CommandError(Error):
 # getflash
 
 # clearambientlevel
-# getambientlevel
 # setambientlevel
 
 # getirrthresholdlow
@@ -67,7 +66,7 @@ class CommandError(Error):
 
 # getintegrate
 # startintegrate
-# topintegrate
+# stopintegrate
 
 # getpeak
 # startpeak
@@ -348,6 +347,9 @@ class ILT1000(object):
 
   def SetFriendlyName(self, name):
     self._SendCommandOrDie('setfriendlyname %s' % name)
+
+  def GetAmbientCurrent(self):
+    return float(self._SendCommand('getambientlevel'))
 
 
 class _Row(object):

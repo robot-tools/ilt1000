@@ -48,6 +48,7 @@ LINES = [
   ('Feedback resistance', ilt.GetFeedbackResistanceOhm, 'Ω'),
   ('Factory dark', ilt.GetFactoryDarkVoltages, 'V'),
   ('User dark', ilt.GetUserDarkVoltages, 'V'),
+  ('Ambient', ilt.GetAmbientCurrent, 'A'),
 ]
 
 
