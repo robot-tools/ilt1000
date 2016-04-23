@@ -47,6 +47,8 @@ LINES = [
   ('Irradiance threshold (low)', ilt.GetIrradianceThresholdLow, ''),
   ('Clock frequency', ilt.GetClockFrequencyHz, '㎐'),
   ('Feedback resistance', ilt.GetFeedbackResistanceOhm, 'Ω'),
+  ('Feedback resistor', lambda: ilt.FEEDBACK_RES_NAMES[ilt.GetFeedbackResistor()], ''),
+  ('Feedback resistor setting', lambda: ilt.FEEDBACK_RES_NAMES[ilt.GetFeedbackResistorSetting()], ''),
   ('Factory dark', ilt.GetFactoryDarkVoltages, 'V'),
   ('User dark', ilt.GetUserDarkVoltages, 'V'),
   ('Ambient', ilt.GetAmbientCurrent, 'A'),

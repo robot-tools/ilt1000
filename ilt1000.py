@@ -56,7 +56,6 @@ class CommandError(Error):
 # getecaldate
 # setecal
 
-# getfeedbackresnumber
 # usefeedbackrestemp
 # setfeedbackres
 
@@ -106,6 +105,13 @@ class ILT1000(object):
   FEEDBACK_RES_LOW = 1
   FEEDBACK_RES_MEDIUM = 2
   FEEDBACK_RES_HIGH = 3
+
+  FEEDBACK_RES_NAMES = {
+    0: 'Auto',
+    1: 'Low',
+    2: 'Medium',
+    3: 'High',
+  }
 
   AVERAGING_AUTO = 0
   AVERAGING_LOW = 1  # 5 ㎐
@@ -254,6 +260,12 @@ class ILT1000(object):
   def GetFeedbackResistanceOhm(self):
     ret = self._SendCommand('getfeedbackres')
     return float(ret) * 100
+
+  def GetFeedbackResistor(self):
+    return int(self._SendCommand('getfeedbackresnumber'))
+
+  def GetFeedbackResistorSetting(self):
+    return int(self._SendCommand('usefeedbackres'))
 
   def SetFeedbackResistor(self, resistor=FEEDBACK_RES_AUTO):
     self._SendCommandOrDie('usefeedbackres %d' % resistor)
