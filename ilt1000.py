@@ -62,9 +62,6 @@ class CommandError(Error):
 # startintegrate
 # stopintegrate
 
-# getpeak
-# startpeak
-
 # gettriggerin
 # settriggerout
 
@@ -363,6 +360,12 @@ class ILT1000(object):
 
   def GetBiasVoltage(self):
     return float(self._SendCommand('getbias'))
+
+  def StartPeak(self):
+    self._SendCommandOrDie('startpeak')
+
+  def GetPeak(self):
+    return float(self._SendCommand('getpeak'))
 
 
 class _Row(object):

@@ -54,6 +54,7 @@ LINES = [
   ('Ambient', ilt.GetAmbientCurrent, 'A'),
   ('Sample time', ilt.GetSampleSeconds, 's'),
   ('Detector bias', ilt.GetBiasVoltage, 'V'),
+  ('Peak', ilt.GetPeak, ''),
 ]
 
 
