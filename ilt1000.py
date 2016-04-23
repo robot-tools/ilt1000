@@ -46,9 +46,6 @@ class CommandError(Error):
 # setcalfactor
 # usecalfactortemp
 
-# setsampletime
-# setsampletimetemp
-
 # getecal
 # getecaldate
 # setecal
@@ -353,6 +350,12 @@ class ILT1000(object):
 
   def GetAmbientCurrent(self):
     return float(self._SendCommand('getambientlevel'))
+
+  def SetSampleSeconds(self, seconds=0):
+    self._SendCommandOrDie('setsampletime %d' % (seconds * 1000))
+
+  def SetSampleSecondsTemp(self, seconds=0):
+    self._SendCommandOrDie('setsampletimetemp %d' % (seconds * 1000))
 
   def GetSampleSeconds(self):
     ret = self._SendCommand('getsampletime')
