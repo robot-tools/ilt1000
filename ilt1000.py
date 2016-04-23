@@ -47,7 +47,6 @@ class CommandError(Error):
 # setcurrentloop
 
 # setuserdark
-# getuserdark
 # setfactorydark
 
 # startlogdata
@@ -257,18 +256,18 @@ class ILT1000(object):
     self._SendCommandOrDie(self._DARK_MODE_COMMANDS[mode])
 
   def GetFactoryDarkVoltages(self):
-    # SPEC ERROR
-    # Actual return value sample:
-    # R1 12149 9733 9251 R2 12476 10080 9604 R3 13940 11894 11435
     ret = self._SendCommand('getfactorydark')
-    return [float(x) / 1000000 for x in ret.split()]
+    values = ret.split(' ')
+    return [
+        [float(values[4 * r + i + 1]) / 1000000 for i in range(3)]
+        for r in range(3)]
 
   def GetUserDarkVoltages(self):
-    # SPEC ERROR
-    # Actual return value sample:
-    # R1 12149 9733 9251 R2 12476 10080 9604 R3 13940 11894 11435
-    ret = self._SendCommand('getfactorydark')
-    return [float(x) / 1000000 for x in ret.split()]
+    ret = self._SendCommand('getuserdark')
+    values = ret.split(' ')
+    return [
+        [float(values[4 * r + i + 1]) / 1000000 for i in range(3)]
+        for r in range(3)]
 
   def GetClockFrequencyHz(self):
     ret = self._SendCommand('getclockfreq')

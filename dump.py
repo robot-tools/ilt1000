@@ -44,6 +44,8 @@ LINES = [
   ('Irradiance', ilt.GetIrradiance, ''),
   ('Clock frequency', ilt.GetClockFrequencyHz, '㎐'),
   ('Feedback resistance', ilt.GetFeedbackResistanceOhm, 'Ω'),
+  ('Factory dark', ilt.GetFactoryDarkVoltages, 'V'),
+  ('User dark', ilt.GetUserDarkVoltages, 'V'),
 ]
 
 
