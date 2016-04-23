@@ -13,7 +13,7 @@ parser.add_argument(
 FLAGS = parser.parse_args()
 
 
-LABEL_WIDTH = 25
+LABEL_WIDTH = 30
 
 
 def PrintLine(label, value, unit=''):
@@ -44,6 +44,7 @@ LINES = [
   ('100% percent setting', ilt.Get100PercentCurrent, 'A'),
   ('Dark mode', lambda: ilt.DARK_NAMES[ilt.GetDarkMode()], ''),
   ('Irradiance', ilt.GetIrradiance, ''),
+  ('Irradiance threshold (low)', ilt.GetIrradianceThresholdLow, ''),
   ('Clock frequency', ilt.GetClockFrequencyHz, '㎐'),
   ('Feedback resistance', ilt.GetFeedbackResistanceOhm, 'Ω'),
   ('Factory dark', ilt.GetFactoryDarkVoltages, 'V'),

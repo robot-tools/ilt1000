@@ -36,7 +36,6 @@ class CommandError(Error):
 # clearambientlevel
 # setambientlevel
 
-# getirrthresholdlow
 # setirrthresholdlow
 
 # setcurrentloop
@@ -202,32 +201,28 @@ class ILT1000(object):
     self._SendCommandOrDie('setdatetime ' + timestr)
 
   def GetSensorCurrent(self):
-    ret = self._SendCommand('getcurrent')
-    return float(ret)
+    return float(self._SendCommand('getcurrent'))
 
   def GetSensorVoltage(self):
-    ret = self._SendCommand('getvoltage')
-    return float(ret)
+    return float(self._SendCommand('getvoltage'))
 
   def GetTransmissionPercent(self):
-    ret = self._SendCommand('gettrans')
-    return float(ret)
+    return float(self._SendCommand('gettrans'))
 
   def Get100PercentCurrent(self):
-    ret = self._SendCommand('get100perc')
-    return float(ret)
+    return float(self._SendCommand('get100perc'))
 
   def Set100PercentCurrent(self):
-    ret = self._SendCommand('set100perc')
-    return float(ret)
+    return float(self._SendCommand('set100perc'))
 
   def GetOpticalDensity(self):
-    ret = self._SendCommand('getod')
-    return float(ret)
+    return float(self._SendCommand('getod'))
 
   def GetIrradiance(self):
-    ret = self._SendCommand('getirradiance')
-    return float(ret)
+    return float(self._SendCommand('getirradiance'))
+
+  def GetIrradianceThresholdLow(self):
+    return float(self._SendCommand('getirrthresholdlow'))
 
   def GetDarkMode(self):
     return int(self._SendCommand('getdarkmode'))
