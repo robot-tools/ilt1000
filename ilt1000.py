@@ -56,7 +56,6 @@ class CommandError(Error):
 # getecaldate
 # setecal
 
-# usefeedbackrestemp
 # setfeedbackres
 
 # getintegrate
@@ -269,6 +268,9 @@ class ILT1000(object):
 
   def SetFeedbackResistor(self, resistor=FEEDBACK_RES_AUTO):
     self._SendCommandOrDie('usefeedbackres %d' % resistor)
+
+  def SetFeedbackResistorTemp(self, resistor=FEEDBACK_RES_AUTO):
+    self._SendCommandOrDie('usefeedbackrestemp %d' % resistor)
 
   _AVERAGING_COMMANDS = {
     AVERAGING_AUTO: 'setautaveraging',
