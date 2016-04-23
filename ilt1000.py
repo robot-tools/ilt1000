@@ -52,8 +52,6 @@ class CommandError(Error):
 # setsampletime
 # setsampletimetemp
 
-# getbias
-
 # getecal
 # getecaldate
 # setecal
@@ -345,9 +343,12 @@ class ILT1000(object):
   def GetAmbientCurrent(self):
     return float(self._SendCommand('getambientlevel'))
 
-  def GetSampleTime(self):
+  def GetSampleSeconds(self):
     ret = self._SendCommand('getsampletime')
     return float(ret) / 1000
+
+  def GetBiasVoltage(self):
+    return float(self._SendCommand('getbias'))
 
 
 class _Row(object):
