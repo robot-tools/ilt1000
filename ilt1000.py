@@ -33,9 +33,6 @@ class CommandError(Error):
 # captureflash (SPEC ERROR: doc description missing)
 # getflash
 
-# clearambientlevel
-# setambientlevel
-
 # setirrthresholdlow
 
 # setcurrentloop
@@ -347,6 +344,12 @@ class ILT1000(object):
 
   def SetFriendlyName(self, name):
     self._SendCommandOrDie('setfriendlyname %s' % name)
+
+  def SetAmbientCurrent(self):
+    self._SendCommandOrDie('setambientlevel')
+
+  def ClearAmbientCurrent(self):
+    self._SendCommandOrDie('clearambientlevel')
 
   def GetAmbientCurrent(self):
     return float(self._SendCommand('getambientlevel'))
