@@ -45,10 +45,6 @@ class CommandError(Error):
 # setuserdark
 # setfactorydark
 
-# startlogdata
-# stoplogdata
-# eraselogdata
-
 # usecalfactor
 # erasecalfactor
 # getcalfactor
