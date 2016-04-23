@@ -33,8 +33,6 @@ class CommandError(Error):
 # captureflash (SPEC ERROR: doc description missing)
 # getflash
 
-# setirrthresholdlow
-
 # setcurrentloop
 
 # setuserdark
@@ -210,6 +208,9 @@ class ILT1000(object):
 
   def GetIrradiance(self):
     return float(self._SendCommand('getirradiance'))
+
+  def SetIrradianceThresholdLow(self, value):
+    self._SendCommandOrDie('setirrthresholdlow %.2e' % value)
 
   def GetIrradianceThresholdLow(self):
     return float(self._SendCommand('getirrthresholdlow'))
