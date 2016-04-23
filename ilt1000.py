@@ -59,13 +59,9 @@ class CommandError(Error):
 # set5vbias
 
 # setwireless
-
-# configbackup
-# configrestore
+# setwflisten
 
 # setmodelname
-
-# setwflisten
 
 
 class ILT1000(object):
@@ -381,6 +377,12 @@ class ILT1000(object):
 
   def GetIntegrate(self):
     return float(self._SendCommand('getintegrate'))
+
+  def BackupConfig(self):
+    self._SendCommandOrDie('configbackup')
+
+  def RestoreConfig(self):
+    self._SendCommandOrDie('configrestore')
 
 
 class _Row(object):
