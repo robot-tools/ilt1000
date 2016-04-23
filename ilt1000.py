@@ -61,8 +61,6 @@ class CommandError(Error):
 # setwireless
 # setwflisten
 
-# setmodelname
-
 
 class ILT1000(object):
 
@@ -141,6 +139,9 @@ class ILT1000(object):
     ret = self._SendCommand(command)
     if int(ret) != 0:
       raise CommandError
+
+  def SetModelName(self, name):
+    self._SendCommandOrDie('setmodelname %s' % name)
 
   def GetModelName(self):
     return self._SendCommand('getmodelname')
