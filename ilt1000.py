@@ -41,6 +41,7 @@ class CommandError(Error):
 # erasecalfactor
 # getcalfactor
 # setcalfactor
+# setsamplecount
 
 
 class ILT1000(object):
@@ -86,7 +87,7 @@ class ILT1000(object):
 
   def _Clear(self):
     self._dev.timeout = 0.1
-    self._dev.write(b'\r\n')
+    self._dev.write(b'\r')
     self._dev.read(2 ** 16)
     self._dev.timeout = None
 
@@ -94,7 +95,10 @@ class ILT1000(object):
     return self._dev.readline().rstrip().decode('ascii')
 
   def _SendCommand(self, command):
-    self._dev.write(command.encode('ascii') + b'\r\n')
+    encoded = command.encode('ascii') + b'\r'
+    self._dev.write(encoded[:1])
+    time.sleep(0.05)
+    self._dev.write(encoded[1:])
     ret = self._GetLine()
     if ret == '-999':
       raise UnsupportedCommand(command)
